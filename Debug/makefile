@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := I2S_Audio
+BUILD_ARTIFACT_NAME := I2S_Audio_1KHz
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-I2S_Audio.elf \
+I2S_Audio_1KHz.elf \
 
 MAP_FILES += \
-I2S_Audio.map \
+I2S_Audio_1KHz.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-I2S_Audio.list \
+I2S_Audio_1KHz.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: I2S_Audio.elf secondary-outputs
+main-build: I2S_Audio_1KHz.elf secondary-outputs
 
 # Tool invocations
-I2S_Audio.elf I2S_Audio.map: $(OBJS) $(USER_OBJS) E:\ST\STWorkspace\I2S_Audio\STM32F756ZGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "I2S_Audio.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"E:\ST\STWorkspace\I2S_Audio\STM32F756ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="I2S_Audio.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+I2S_Audio_1KHz.elf I2S_Audio_1KHz.map: $(OBJS) $(USER_OBJS) E:\ST\STWorkspace\I2S_Audio_1KHz\STM32F756ZGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "I2S_Audio_1KHz.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"E:\ST\STWorkspace\I2S_Audio_1KHz\STM32F756ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="I2S_Audio_1KHz.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-I2S_Audio.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "I2S_Audio.list"
+I2S_Audio_1KHz.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "I2S_Audio_1KHz.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) I2S_Audio.elf I2S_Audio.list I2S_Audio.map default.size.stdout
+	-$(RM) I2S_Audio_1KHz.elf I2S_Audio_1KHz.list I2S_Audio_1KHz.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

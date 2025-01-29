@@ -68,20 +68,143 @@ static void MX_I2S2_Init(void);
 static void MX_I2S3_Init(void);
 /* USER CODE BEGIN PFP */
 
-#define BUFF_SIZE				64000UL
-
-static uint16_t rxBuff[BUFF_SIZE];
-static volatile uint32_t txStarted= 0;
+#define DATABUFFER_MIC		256
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
 
 
-void HAL_I2S_RxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
-{
-	if(!txStarted)
-	{
-		HAL_I2S_Transmit_DMA(&hi2s2, rxBuff, BUFF_SIZE);
-		txStarted= 1;
-	}
-}
+static volatile uint32_t txBusy = 0;
+
+
+const uint16_t sineBuff[] = {
+		0,
+		0,
+		0,
+		0,
+		6392,
+		47104,
+		0,
+		0,
+		12539,
+		50176,
+		0,
+		0,
+		18204,
+		60416,
+		0,
+		0,
+		23170,
+		30720,
+		0,
+		0,
+		27245,
+		38656,
+		0,
+		0,
+		30273,
+		44544,
+		0,
+		0,
+		32138,
+		24064,
+		0,
+		0,
+		32767,
+		65280,
+		0,
+		0,
+		32138,
+		24064,
+		0,
+		0,
+		30273,
+		44544,
+		0,
+		0,
+		27245,
+		38656,
+		0,
+		0,
+		23170,
+		30720,
+		0,
+		0,
+		18204,
+		60416,
+		0,
+		0,
+		12539,
+		50176,
+		0,
+		0,
+		6392,
+		47104,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		59143,
+		18432,
+		0,
+		0,
+		52996,
+		15360,
+		0,
+		0,
+		47331,
+		5120,
+		0,
+		0,
+		42365,
+		34816,
+		0,
+		0,
+		38290,
+		26880,
+		0,
+		0,
+		35262,
+		20992,
+		0,
+		0,
+		33397,
+		41472,
+		0,
+		0,
+		32768,
+		256,
+		0,
+		0,
+		33397,
+		41472,
+		0,
+		0,
+		35262,
+		20992,
+		0,
+		0,
+		38290,
+		26880,
+		0,
+		0,
+		42365,
+		34816,
+		0,
+		0,
+		47331,
+		5120,
+		0,
+		0,
+		52996,
+		15360,
+		0,
+		0,
+		59143,
+		18432,
+		0,
+		0,
+};
 
 /**
   * @brief  The application entry point.
@@ -90,14 +213,28 @@ void HAL_I2S_RxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
 int main(void)
 {
 
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* Configure the peripherals common clocks */
   PeriphCommonClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
@@ -109,14 +246,15 @@ int main(void)
   MX_I2S3_Init();
 
 
-  HAL_I2S_Receive_DMA(&hi2s3, rxBuff, BUFF_SIZE);
+  HAL_StatusTypeDef err;
 
-  /* Infinite loop */
-  while (1)
-  {
-	  /* Void */
-  }
-
+  	while (1)
+  	{
+  		if(!txBusy)
+  		{
+  			err = HAL_I2S_Transmit(&hi2s2, (uint16_t*)sineBuff, ARRAY_SIZE(sineBuff), 100);
+  		}
+  	}
 }
 
 /**

@@ -27,9 +27,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0000600c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00012d8a  00000000  00000000  0000603c  2**0
+ 12 .debug_info   00012d8d  00000000  00000000  0000603c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00002887  00000000  00000000  00018dc6  2**0
+ 13 .debug_abbrev 00002885  00000000  00000000  00018dc9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  14 .debug_aranges 00000f58  00000000  00000000  0001b650  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00026002  00000000  00000000  0001d18d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001435c  00000000  00000000  0004318f  2**0
+ 17 .debug_line   00014360  00000000  00000000  0004318f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000e9b02  00000000  00000000  000574eb  2**0
+ 18 .debug_str    000e9b02  00000000  00000000  000574ef  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  00140fed  2**0
+ 19 .comment      00000043  00000000  00000000  00140ff1  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004090  00000000  00000000  00141030  2**2
+ 20 .debug_frame  00004090  00000000  00000000  00141034  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000045  00000000  00000000  001450c0  2**0
+ 21 .debug_line_str 00000045  00000000  00000000  001450c4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -10399,9 +10399,9 @@ static HAL_StatusTypeDef USB_CoreReset(USB_OTG_GlobalTypeDef *USBx)
 	...
 
 08003e68 <HAL_I2S_RxHalfCpltCallback>:
-static uint16_t rxBuff[BUFF_SIZE];
-static volatile uint32_t txStarted= 0;
-
+//{
+//
+//}
 
 void HAL_I2S_RxHalfCpltCallback(I2S_HandleTypeDef *hi2s)
 {
@@ -10444,10 +10444,16 @@ int main(void)
 {
  8003ea0:	b580      	push	{r7, lr}
  8003ea2:	af00      	add	r7, sp, #0
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
  8003ea4:	f7fc fb28 	bl	80004f8 <HAL_Init>
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -10456,6 +10462,9 @@ int main(void)
   /* Configure the peripherals common clocks */
   PeriphCommonClock_Config();
  8003eac:	f000 f882 	bl	8003fb4 <PeriphCommonClock_Config>
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
@@ -10472,15 +10481,17 @@ int main(void)
  8003ec4:	f000 f8da 	bl	800407c <MX_I2S2_Init>
   MX_I2S3_Init();
  8003ec8:	f000 f904 	bl	80040d4 <MX_I2S3_Init>
+  /* USER CODE BEGIN 2 */
 
-
-  HAL_I2S_Receive_DMA(&hi2s3, rxBuff, BUFF_SIZE);
+  /* USER CODE END 2 */
+	HAL_I2S_Receive_DMA(&hi2s3, rxBuff, BUFF_SIZE);
  8003ecc:	f44f 427a 	mov.w	r2, #64000	@ 0xfa00
  8003ed0:	4902      	ldr	r1, [pc, #8]	@ (8003edc <main+0x3c>)
  8003ed2:	4803      	ldr	r0, [pc, #12]	@ (8003ee0 <main+0x40>)
  8003ed4:	f7fd fca4 	bl	8001820 <HAL_I2S_Receive_DMA>
 
   /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1)
  8003ed8:	bf00      	nop
  8003eda:	e7fd      	b.n	8003ed8 <main+0x38>
